@@ -1,4 +1,4 @@
-package Framework.Setup;
+package Framework.Util;
 
 import java.time.Duration;
 

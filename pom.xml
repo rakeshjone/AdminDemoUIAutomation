@@ -3,16 +3,6 @@
   <groupId>AdminDemoUIAutomation</groupId>
   <artifactId>AdminDemoUIAutomation</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-    <build>
-        <resources>
-            <resource>
-                <directory>src/test/resources/Configurations</directory>
-                <includes>
-                    <include>*.properties</include>
-                </includes>
-            </resource>
-        </resources>
-    </build>
   <dependencies>
 	  <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
 <dependency>
