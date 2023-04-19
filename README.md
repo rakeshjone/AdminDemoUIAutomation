@@ -6,7 +6,7 @@ also needs to be marked as resources in project structure as shown in below imag
 
 
 2. Glue option is tricky to setup in runner file when you want to use hooks in a seperate file. When suppliying glue cucumber looks for hooks and glue in same location. 
-Combination of glue and extraglue, with and without glue, impacts glue working properly. For this setup leave out glue settings.
+Combination of glue and extraglue, with and without glue, impacts glue working properly. For this setup leave out glue settings as it is.
 3. To be able to run test via both Runner.java and cucumber file keep run config for both as below:
 Run>Edit COnfigurations
 ![image](https://user-images.githubusercontent.com/130054374/232773173-2c7d9458-6e91-4db0-8c3f-957a63b8afdc.png)
