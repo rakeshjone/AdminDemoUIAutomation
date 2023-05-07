@@ -37,7 +37,7 @@ public class ConfigurationManager {
 /*
         File source = new File("C:\\Dev\\Projects\\AdminDemoUIAutomation\\src\\test\\resources\\Configurations\\Default.properties");
         try{
-        return new FileInputStream(source);}catch (Exception e) {
+        return new FileInputStream(source);}catch (Excepti on e) {
         }
         return null;*/
 
