@@ -9,10 +9,7 @@ public class Setup {
 
     @Before
     public void SetupDriver(){
-        System.out.println("Before");
         ResolvePropertiesFile();
-    	//DriverManager.getInstance().LoadDriver("chrome");
-    	//DriverManager.getInstance().navigateToURL("https://admin-demo.nopcommerce.com/login");
         DriverManager.getInstance().LoadDriver(ConfigurationManager.getInstance().getProperty("browser"));
         DriverManager.getInstance().navigateToURL(ConfigurationManager.getInstance().getProperty("URL"));
     }
@@ -24,9 +21,9 @@ public class Setup {
 
     private void ResolvePropertiesFile(){
     	
-        switch (ConfigurationManager.getInstance().getProperty("Environment")) {
-            case "Test" -> ConfigurationManager.getInstance().LoadAdditionalProperties("Test.properties");
-            case "Acceptance" -> ConfigurationManager.getInstance().LoadAdditionalProperties("Acceptance.properties");
+        switch (ConfigurationManager.getInstance().getProperty("Environment").toUpperCase()) {
+            case "TEST" -> ConfigurationManager.getInstance().LoadAdditionalProperties("Test.properties");
+            case "ACCEPTANCE" -> ConfigurationManager.getInstance().LoadAdditionalProperties("Acceptance.properties");
             default -> ConfigurationManager.getInstance().LoadAdditionalProperties("Delivery.properties");
         }
     }
