@@ -33,14 +33,6 @@ public class ConfigurationManager {
     }
 
     private InputStream getInputStream(String filename) {
-        //return ConfigurationManager.class.getClassLoader().getResourceAsStream(filename);
-/*
-        File source = new File("C:\\Dev\\Projects\\AdminDemoUIAutomation\\src\\test\\resources\\Configurations\\Default.properties");
-        try{
-        return new FileInputStream(source);}catch (Excepti on e) {
-        }
-        return null;*/
-
         try {
             List<URL> urls = Collections.list(Thread.currentThread().getContextClassLoader().getResources(filename));
             return urls == null || urls.isEmpty() ? null : urls.get(0).openStream();
@@ -56,10 +48,5 @@ public class ConfigurationManager {
         }catch (IOException e){
             e.printStackTrace();
         }
-        /*
-        File source = new File("C:\\Dev\\Projects\\AdminDemoUIAutomation\\src\\test\\resources\\Configurations\\Delivery.properties");
-        try{
-            PROPERTIES.load(new FileInputStream(source));}catch (Exception e) {
-        }*/
     }
 }
