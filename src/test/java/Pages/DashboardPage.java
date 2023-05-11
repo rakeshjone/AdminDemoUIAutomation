@@ -7,7 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 public class DashboardPage extends BasePage{
-    WebElement dashboard = DriverManager.Driver.findElement(By.xpath("//div[@class=\"content-header\"]"));
+    WebElement dashboard = DriverManager.getInstance().Driver.findElement(By.xpath("//div[@class='content-header']"));
 
     public DashboardPage(String title) {
         super(title);

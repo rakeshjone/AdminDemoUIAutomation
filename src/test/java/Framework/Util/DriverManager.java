@@ -5,6 +5,7 @@ import java.time.Duration;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -15,14 +16,14 @@ import org.openqa.selenium.support.ui.Wait;
 import static java.util.concurrent.TimeUnit.*;
 
 public class DriverManager {
-	private WebDriver webDriver;
-    public static SearchContext Driver;
+	private WebDriver webDriver = null;
+    public SearchContext Driver = null;
     private static DriverManager manager = null;
 
     private DriverManager() {
     }
 
-    public Wait<WebDriver> iwait(){
+    public Wait<WebDriver> fluentwait(){
         Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
                 .withTimeout(Duration.ofSeconds(Integer.parseInt(ConfigurationManager.getInstance().getProperty("Timeout"))))
                 .pollingEvery(Duration.ofMillis(Integer.parseInt(ConfigurationManager.getInstance().getProperty("Polling"))))
@@ -30,7 +31,13 @@ public class DriverManager {
         return wait;
     }
 
-    public static DriverManager getInstance(){
+    public void pageReady(){
+        Wait wait = fluentwait();
+        wait.until(webDriver -> ((JavascriptExecutor) webDriver)
+                .executeScript("return document.readyState").equals("complete"));
+    }
+
+    public static final DriverManager getInstance(){
         if (manager==null){
             manager = new DriverManager();
         }
@@ -54,7 +61,12 @@ public class DriverManager {
     public void CloseDriver(){
         if (webDriver !=null){
         	webDriver.close();
-        	webDriver.quit();
+        }
+    }
+
+    public void QuitDriver(){
+        if (webDriver !=null){
+            webDriver.quit();
         }
     }
 
@@ -63,8 +75,10 @@ public class DriverManager {
     }
 
     private void setWebDriver(WebDriver webDriver) {
-    	this.webDriver = webDriver;
-        Driver = webDriver;
+        if (this.webDriver==null){
+            this.webDriver = webDriver;
+            Driver = webDriver;
+        }
     }
 
     public String getPageTitle(){
