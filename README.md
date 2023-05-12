@@ -3,6 +3,7 @@ Ui automation test project for admin demo website with java cucumber and junit
 Run tests via terminal: 
 mvn test -D"cucumber.filter.tags=@login"
 mvn test
+mvn clean test
 1. To be able to read files via Thread.currentThread().getContextClassLoader().getResources("filename") in configurations manager Configurations folder under resources 
 also needs to be marked as resources in project structure as shown in below image.
 ![image](https://user-images.githubusercontent.com/130054374/232771905-afbefaee-ca9e-4c39-b4f5-3afe0e6a1a07.png)
