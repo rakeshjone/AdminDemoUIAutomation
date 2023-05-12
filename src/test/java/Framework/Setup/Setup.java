@@ -3,11 +3,8 @@ package Framework.Setup;
 import Framework.Util.DriverManager;
 import Framework.Util.ConfigurationManager;
 import io.cucumber.java.*;
-import org.junit.BeforeClass;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class Setup {

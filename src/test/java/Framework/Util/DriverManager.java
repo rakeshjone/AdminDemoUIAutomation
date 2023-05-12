@@ -50,9 +50,7 @@ public class DriverManager {
                setWebDriver(new EdgeDriver());
                break;
            default:
-               try{
-               setWebDriver(new ChromeDriver());}
-               catch (Exception e){}
+               setWebDriver(new ChromeDriver());
                break;
        }
        webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(
