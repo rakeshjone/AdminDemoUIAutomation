@@ -50,11 +50,13 @@ public class DriverManager {
                setWebDriver(new EdgeDriver());
                break;
            default:
-               setWebDriver(new ChromeDriver());
+               try{
+               setWebDriver(new ChromeDriver());}
+               catch (Exception e){}
                break;
        }
-       webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
-       //webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+       webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(
+               Integer.parseInt(ConfigurationManager.getInstance().getProperty("Timeout"))));
        webDriver.manage().window().maximize();
    }
 
@@ -68,6 +70,11 @@ public class DriverManager {
         if (webDriver !=null){
             webDriver.quit();
         }
+    }
+
+    public void killSession(){
+        webDriver = null;
+        Driver = null;
     }
 
     public void navigateToURL(String URL){

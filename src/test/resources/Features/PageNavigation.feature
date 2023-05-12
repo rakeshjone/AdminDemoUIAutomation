@@ -11,4 +11,4 @@ Feature: PageNavigation
     Examples:
     |PageTitle|
     |Products |
-    |TaxSettings|
+    |Tax settings|

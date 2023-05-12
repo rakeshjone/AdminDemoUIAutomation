@@ -3,6 +3,7 @@ package Framework.Setup;
 import Framework.Util.DriverManager;
 import Framework.Util.ConfigurationManager;
 import io.cucumber.java.*;
+import org.junit.BeforeClass;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 
@@ -37,6 +38,7 @@ public class Setup {
         }
         DriverManager.getInstance().CloseDriver();
         DriverManager.getInstance().QuitDriver();
+        DriverManager.getInstance().killSession();
     }
 
 
