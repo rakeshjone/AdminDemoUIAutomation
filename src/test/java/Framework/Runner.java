@@ -13,9 +13,9 @@ import io.cucumber.junit.Cucumber;
 		//extraGlue = {"Framework/Setup"},
 		monochrome = true,
 		plugin = {"pretty","html:target/HtmlReports/testResult.html",
-		"json:target/JSONReports/testResult.html",
-		"junit:target/XMLReports/testResult.html"},
-		tags = "@Navigation")
+		"json:target/JSONReports/testResult.json",
+		"junit:target/XMLReports/testResult.xml"},
+		tags = "@Navigation or @login")
 public class Runner {
 
 }
