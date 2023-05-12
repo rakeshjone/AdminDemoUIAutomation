@@ -19,7 +19,7 @@ public class NavigationPane {
         boolean found = false;
              for (WebElement webElement : mainNavTree) {
                  WebElement label = webElement.findElement(By.xpath("./a/p"));
-                 if (label.getText().equals(linkName)){
+                 if (label.getText().trim().equals(linkName)){
                      Browser.clickOnElement(webElement);
                      Browser.waitUntilAttributeValueIs(webElement,"class","nav-item has-treeview menu-is-opening menu-open");
                      found = !found;
@@ -46,9 +46,9 @@ public class NavigationPane {
     public void expandSubNavTreeInSideMenu(String linkName){
         boolean found = false;
         WebElement openedMainNavTreeItem = DriverManager.getInstance().Driver.findElement(By.xpath(".//aside//a/p[text()=' Dashboard']/ancestor::li[@class='nav-item']/following-sibling::li[@class='nav-item has-treeview menu-is-opening menu-open']"));
-        List<WebElement> subTreeItems = openedMainNavTreeItem.findElements(By.xpath(".//li[@class='nav-item has-treeview']']"));
+        List<WebElement> subTreeItems = openedMainNavTreeItem.findElements(By.xpath(".//li[@class='nav-item has-treeview']"));
         for (WebElement webElement:subTreeItems) {
-            if (webElement.findElement(By.xpath("./a/p")).getText().equals(linkName)){
+            if (webElement.findElement(By.xpath("./a/p")).getText().trim().equals(linkName)){
                 Browser.clickOnElement(webElement);
                 Browser.waitUntilAttributeValueIs(webElement,"class","nav-item has-treeview menu-is-opening menu-open");
                 found =true;

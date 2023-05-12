@@ -5,8 +5,6 @@ import Framework.Util.ConfigurationManager;
 import io.cucumber.java.*;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class Setup {
@@ -37,6 +35,7 @@ public class Setup {
         }
         DriverManager.getInstance().CloseDriver();
         DriverManager.getInstance().QuitDriver();
+        DriverManager.getInstance().killSession();
     }
 
 

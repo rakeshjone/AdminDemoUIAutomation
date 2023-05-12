@@ -11,9 +11,9 @@ public class PageNavigationStepDefinition {
                 AdminDemoUIApp.navigationPane().expandMainNavTreeInSideMenu("Catalog");
                 AdminDemoUIApp.navigationPane().clickOnPageNavigationLinkInMainNavTreeMenu(link);
                 break;
-            case "TaxSettings":
-                AdminDemoUIApp.navigationPane().expandMainNavTreeInSideMenu("\n" + "Configuration");
-                AdminDemoUIApp.navigationPane().expandSubNavTreeInSideMenu("\n" + "Settings");
+            case "Tax settings":
+                AdminDemoUIApp.navigationPane().expandMainNavTreeInSideMenu("Configuration");
+                AdminDemoUIApp.navigationPane().expandSubNavTreeInSideMenu("Settings");
                 AdminDemoUIApp.navigationPane().clickOnPageNavigationLinkInSubNavTreeMenu(link);
                 break;
         }
@@ -25,7 +25,8 @@ public class PageNavigationStepDefinition {
             case "Products":
                 AdminDemoUIApp.productsPage().VerifyProductsPageIsDisplayed();
                 break;
-            case "TaxSettings":
+            case "Tax settings":
+                AdminDemoUIApp.taxSettingsPage().VerifyTaxSettingsPageIsDisplayed();
                 break;
         }
         AdminDemoUIApp.navigationPane().clickOnLogoutButton();
