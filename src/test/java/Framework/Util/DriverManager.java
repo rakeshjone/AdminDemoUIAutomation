@@ -2,6 +2,8 @@ package Framework.Util;
 
 import java.sql.Time;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
@@ -9,7 +11,10 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
@@ -18,7 +23,7 @@ import static java.util.concurrent.TimeUnit.*;
 public class DriverManager {
 	private WebDriver webDriver = null;
     public SearchContext Driver = null;
-    private static DriverManager manager = null;
+    private static ThreadLocal<DriverManager> manager = new ThreadLocal<DriverManager>();;
 
     private DriverManager() {
     }
@@ -37,11 +42,13 @@ public class DriverManager {
                 .executeScript("return document.readyState").equals("complete"));
     }
 
-    public static final DriverManager getInstance(){
-        if (manager==null){
-            manager = new DriverManager();
+    public static DriverManager getInstance(){
+        System.out.println("Getting instance for Thread:" + Thread.currentThread().getName());
+        if (manager.get()==null){
+            manager.set(new DriverManager());
+            System.out.println("Got instance for Thread:" + Thread.currentThread().getName());
         }
-        return manager;
+        return manager.get();
     }
 
    public void LoadDriver(String browser) {
@@ -49,8 +56,17 @@ public class DriverManager {
            case "edge":
                setWebDriver(new EdgeDriver());
                break;
+           case "firefox":
+               setWebDriver(new FirefoxDriver());
+               break;
            default:
-               setWebDriver(new ChromeDriver());
+               ChromeOptions options = new ChromeOptions();
+               if (ConfigurationManager.getInstance().getProperty("emulate").equals("y")) {
+                   Map<String, Object> emulation = new HashMap<>();
+                   emulation.put("deviceName", ConfigurationManager.getInstance().getProperty("mobileDevice"));
+                   options.setExperimentalOption("mobileEmulation", emulation);
+               }
+               setWebDriver(new ChromeDriver(options));
                break;
        }
        webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(
@@ -58,13 +74,13 @@ public class DriverManager {
        webDriver.manage().window().maximize();
    }
 
-    public void CloseDriver(){
+    public void closeDriver(){
         if (webDriver !=null){
         	webDriver.close();
         }
     }
 
-    public void QuitDriver(){
+    public void quitDriver(){
         if (webDriver !=null){
             webDriver.quit();
         }
@@ -73,6 +89,10 @@ public class DriverManager {
     public void killSession(){
         webDriver = null;
         Driver = null;
+    }
+
+    public void remove(){
+        manager.remove();
     }
 
     public void navigateToURL(String URL){

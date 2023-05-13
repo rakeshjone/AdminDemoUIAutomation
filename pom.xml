@@ -40,8 +40,14 @@
 <dependency>
     <groupId>org.seleniumhq.selenium</groupId>
     <artifactId>selenium-edge-driver</artifactId>
-    <version>4.8.3</version>
+    <version>4.9.1</version>
 </dependency>
+      <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-firefox-driver -->
+      <dependency>
+          <groupId>org.seleniumhq.selenium</groupId>
+          <artifactId>selenium-firefox-driver</artifactId>
+          <version>4.9.1</version>
+      </dependency>
       <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
       <dependency>
           <groupId>org.apache.logging.log4j</groupId>

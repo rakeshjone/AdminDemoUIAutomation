@@ -14,12 +14,12 @@ public class Setup {
 
 
     @BeforeAll
-    public static void SetupDriver(){
-        ResolvePropertiesFile();
+    public static void setupDriver(){
+        resolvePropertiesFile();
     }
 
     @Before
-    public void ScenarioSetup(Scenario scenario){
+    public void scenarioSetup(Scenario scenario){
         this.scenario = scenario;
         logger.info("###############Running step############# "+scenario.getName());
         DriverManager.getInstance().LoadDriver(ConfigurationManager.getInstance().getProperty("browser"));
@@ -28,18 +28,26 @@ public class Setup {
 
 
     @After
-    public void ScenarioReport(){
+    public void scenarioReport(){
         if (scenario.isFailed()) {
             byte[] screenshot = ((TakesScreenshot) DriverManager.getInstance().Driver).getScreenshotAs(OutputType.BYTES);
             scenario.attach(screenshot, "image/png", "Screenshot");
         }
-        DriverManager.getInstance().CloseDriver();
-        DriverManager.getInstance().QuitDriver();
+
+        if (!ConfigurationManager.getInstance().getProperty("browser").equals("firefox")){
+            DriverManager.getInstance().closeDriver();
+        }
+
+        DriverManager.getInstance().quitDriver();
         DriverManager.getInstance().killSession();
     }
 
+    @AfterAll
+    public static void looseDriverManager(){
+        DriverManager.getInstance().remove();
+    }
 
-    private static void ResolvePropertiesFile(){
+    private static void resolvePropertiesFile(){
         switch (ConfigurationManager.getInstance().getProperty("Environment").toUpperCase()) {
             case "TEST" -> ConfigurationManager.getInstance().LoadAdditionalProperties("Test.properties");
             case "ACCEPTANCE" -> ConfigurationManager.getInstance().LoadAdditionalProperties("Acceptance.properties");
