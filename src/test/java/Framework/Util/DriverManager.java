@@ -18,7 +18,7 @@ import static java.util.concurrent.TimeUnit.*;
 public class DriverManager {
 	private WebDriver webDriver = null;
     public SearchContext Driver = null;
-    private static DriverManager manager = null;
+    private static ThreadLocal<DriverManager> manager = new ThreadLocal<DriverManager>();;
 
     private DriverManager() {
     }
@@ -37,11 +37,13 @@ public class DriverManager {
                 .executeScript("return document.readyState").equals("complete"));
     }
 
-    public static final DriverManager getInstance(){
-        if (manager==null){
-            manager = new DriverManager();
+    public static DriverManager getInstance(){
+        System.out.println("Getting instance for Thread:" + Thread.currentThread().getName());
+        if (manager.get()==null){
+            manager.set(new DriverManager());
+            System.out.println("Got instance for Thread:" + Thread.currentThread().getName());
         }
-        return manager;
+        return manager.get();
     }
 
    public void LoadDriver(String browser) {
@@ -58,13 +60,13 @@ public class DriverManager {
        webDriver.manage().window().maximize();
    }
 
-    public void CloseDriver(){
+    public void closeDriver(){
         if (webDriver !=null){
         	webDriver.close();
         }
     }
 
-    public void QuitDriver(){
+    public void quitDriver(){
         if (webDriver !=null){
             webDriver.quit();
         }
@@ -73,6 +75,10 @@ public class DriverManager {
     public void killSession(){
         webDriver = null;
         Driver = null;
+    }
+
+    public void remove(){
+        manager.remove();
     }
 
     public void navigateToURL(String URL){
