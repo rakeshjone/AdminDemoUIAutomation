@@ -33,7 +33,11 @@ public class Setup {
             byte[] screenshot = ((TakesScreenshot) DriverManager.getInstance().Driver).getScreenshotAs(OutputType.BYTES);
             scenario.attach(screenshot, "image/png", "Screenshot");
         }
-        DriverManager.getInstance().closeDriver();
+
+        if (!ConfigurationManager.getInstance().getProperty("browser").equals("firefox")){
+            DriverManager.getInstance().closeDriver();
+        }
+
         DriverManager.getInstance().quitDriver();
         DriverManager.getInstance().killSession();
     }

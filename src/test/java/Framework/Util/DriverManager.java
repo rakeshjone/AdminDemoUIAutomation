@@ -10,6 +10,8 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
@@ -50,6 +52,9 @@ public class DriverManager {
        switch (browser) {
            case "edge":
                setWebDriver(new EdgeDriver());
+               break;
+           case "firefox":
+               setWebDriver(new FirefoxDriver());
                break;
            default:
                setWebDriver(new ChromeDriver());
