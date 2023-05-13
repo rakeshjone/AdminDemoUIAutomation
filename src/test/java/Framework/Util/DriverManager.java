@@ -2,6 +2,8 @@ package Framework.Util;
 
 import java.sql.Time;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
@@ -9,6 +11,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -57,7 +60,13 @@ public class DriverManager {
                setWebDriver(new FirefoxDriver());
                break;
            default:
-               setWebDriver(new ChromeDriver());
+               ChromeOptions options = new ChromeOptions();
+               if (ConfigurationManager.getInstance().getProperty("emulate").equals("y")) {
+                   Map<String, Object> emulation = new HashMap<>();
+                   emulation.put("deviceName", ConfigurationManager.getInstance().getProperty("mobileDevice"));
+                   options.setExperimentalOption("mobileEmulation", emulation);
+               }
+               setWebDriver(new ChromeDriver(options));
                break;
        }
        webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(
