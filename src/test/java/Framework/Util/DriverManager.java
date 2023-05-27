@@ -15,6 +15,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
@@ -43,10 +45,8 @@ public class DriverManager {
     }
 
     public static DriverManager getInstance(){
-        System.out.println("Getting instance for Thread:" + Thread.currentThread().getName());
         if (manager.get()==null){
             manager.set(new DriverManager());
-            System.out.println("Got instance for Thread:" + Thread.currentThread().getName());
         }
         return manager.get();
     }

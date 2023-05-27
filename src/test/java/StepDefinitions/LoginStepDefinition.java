@@ -14,6 +14,7 @@ public class LoginStepDefinition {
 
 @Given("I navigate to admin demo website")
 public void i_navigate_to_admin_demo_website() {
+    System.out.println(AdminDemoUIApp.userdata().getEmail());
 }
 
 @Given("I enter user credentials")

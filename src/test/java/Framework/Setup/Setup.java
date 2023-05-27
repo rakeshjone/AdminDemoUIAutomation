@@ -1,10 +1,19 @@
 package Framework.Setup;
 
+import Framework.Data.Userdata;
+import Framework.Root.AdminDemoUIApp;
 import Framework.Util.DriverManager;
 import Framework.Util.ConfigurationManager;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.*;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+
+import javax.management.timer.Timer;
+import java.io.File;
+import java.sql.Time;
+import java.time.LocalTime;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class Setup {
@@ -14,14 +23,15 @@ public class Setup {
 
 
     @BeforeAll
-    public static void setupDriver(){
+    public static void setupDriver() {
         resolvePropertiesFile();
     }
 
     @Before
     public void scenarioSetup(Scenario scenario){
         this.scenario = scenario;
-        logger.info("###############Running step############# "+scenario.getName());
+        System.out.println("########starting thread: " + Thread.currentThread().getName() + " at " + Time.valueOf(LocalTime.now()));
+        logger.info("###############Running test############# "+scenario.getName());
         DriverManager.getInstance().LoadDriver(ConfigurationManager.getInstance().getProperty("browser"));
         DriverManager.getInstance().navigateToURL(ConfigurationManager.getInstance().getProperty("URL"));
     }
