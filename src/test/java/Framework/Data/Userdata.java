@@ -2,7 +2,7 @@ package Framework.Data;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+//initialised in AdminDemoUIApp class
 public class Userdata {
     @JsonProperty("email")
     public String getEmail() {

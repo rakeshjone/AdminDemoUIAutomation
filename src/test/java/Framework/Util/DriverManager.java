@@ -1,5 +1,7 @@
 package Framework.Util;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Time;
 import java.time.Duration;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
@@ -73,6 +76,42 @@ public class DriverManager {
                Integer.parseInt(ConfigurationManager.getInstance().getProperty("Timeout"))));
        webDriver.manage().window().maximize();
    }
+
+    public void LoadRemoteDriver(String browser) throws MalformedURLException {
+        switch (browser) {
+            case "edge":
+                setWebDriver(new EdgeDriver());
+                break;
+            case "firefox":
+                setWebDriver(new FirefoxDriver());
+                break;
+            default:
+                /*
+                ChromeOptions options = new ChromeOptions();
+                if (ConfigurationManager.getInstance().getProperty("emulate").equals("y")) {
+                    Map<String, Object> emulation = new HashMap<>();
+                    emulation.put("deviceName", ConfigurationManager.getInstance().getProperty("mobileDevice"));
+                    options.setExperimentalOption("mobileEmulation", emulation);
+                }*/
+                DesiredCapabilities capabilities = new DesiredCapabilities();
+                capabilities.setBrowserName("chrome");
+                //Set hub and node locally or on docker
+                //change Docker property in default.properties
+                if (ConfigurationManager.getInstance().getProperty("Docker") == "True") {
+                    //if hub and nodes are setup on docker
+                    setWebDriver(new RemoteWebDriver(new URL(ConfigurationManager.getInstance().getProperty("DOCKERHUB")),capabilities));
+                }
+                else {
+                    //if hub and node are setup locally
+                    setWebDriver(new RemoteWebDriver(new URL(ConfigurationManager.getInstance().getProperty("LOCALHUB")),capabilities));
+                }
+
+                break;
+        }
+        webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(
+                Integer.parseInt(ConfigurationManager.getInstance().getProperty("Timeout"))));
+        webDriver.manage().window().maximize();
+    }
 
     public void closeDriver(){
         if (webDriver !=null){
