@@ -11,6 +11,8 @@ import org.openqa.selenium.TakesScreenshot;
 
 import javax.management.timer.Timer;
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
@@ -30,9 +32,20 @@ public class Setup {
     @Before
     public void scenarioSetup(Scenario scenario){
         this.scenario = scenario;
-        System.out.println("########starting thread: " + Thread.currentThread().getName() + " at " + Time.valueOf(LocalTime.now()));
-        logger.info("###############Running test############# "+scenario.getName());
-        DriverManager.getInstance().LoadDriver(ConfigurationManager.getInstance().getProperty("browser"));
+        System.out.println("\u001B[32m" + "########starting thread: " + Thread.currentThread().getName() + " at " + Time.valueOf(LocalTime.now()) + "\u001B[0m");
+        logger.info("\u001B[32m" + "###############Running test############# "+scenario.getName() + "\u001B[0m");
+        switch (ConfigurationManager.getInstance().getProperty("Local").toUpperCase()) {
+            case "TRUE":
+                //Run tests locally
+                DriverManager.getInstance().LoadDriver(ConfigurationManager.getInstance().getProperty("browser"));
+            case "FALSE":
+                //Run test via hub and node
+                try {
+                    DriverManager.getInstance().LoadRemoteDriver(ConfigurationManager.getInstance().getProperty("browser"));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+        }
         DriverManager.getInstance().navigateToURL(ConfigurationManager.getInstance().getProperty("URL"));
     }
 

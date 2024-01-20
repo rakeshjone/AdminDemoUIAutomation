@@ -9,10 +9,10 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 public class NavigationPane {
-    WebElement burgerMenu = DriverManager.getInstance().Driver.findElement(By.id("nopSideBarPusher"));
-    WebElement sideNav = DriverManager.getInstance().Driver.findElement(By.xpath(".//aside/div[contains(@class,'sidebar')]"));
-    WebElement dashBoardNavItem = DriverManager.getInstance().Driver.findElement(By.xpath(".//aside//a/p[text()=' Dashboard']/ancestor::li[@class='nav-item']"));
-    List<WebElement> mainNavTree = DriverManager.getInstance().Driver.findElements(By.xpath(".//aside//a/p[text()=' Dashboard']/ancestor::li[@class='nav-item']/following-sibling::*"));
+    private WebElement burgerMenu = DriverManager.getInstance().Driver.findElement(By.id("nopSideBarPusher"));
+    private WebElement sideNav = DriverManager.getInstance().Driver.findElement(By.xpath(".//aside/div[contains(@class,'sidebar')]"));
+    private WebElement dashBoardNavItem = DriverManager.getInstance().Driver.findElement(By.xpath(".//aside//a/p[text()=' Dashboard']/ancestor::li[@class='nav-item']"));
+    private List<WebElement> mainNavTree = DriverManager.getInstance().Driver.findElements(By.xpath(".//aside//a/p[text()=' Dashboard']/ancestor::li[@class='nav-item']/following-sibling::*"));
 
 
     public void expandMainNavTreeInSideMenu(String linkName){

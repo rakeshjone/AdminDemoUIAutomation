@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 
 public class ProductsPage extends BasePage{
 
-    WebElement products = DriverManager.getInstance().Driver.findElement(By.xpath("//div[@class='content-header clearfix']/h1"));
+    private WebElement products = DriverManager.getInstance().Driver.findElement(By.xpath("//div[@class='content-header clearfix']/h1"));
 
     public ProductsPage(String title) {
         super(title);
