@@ -37,14 +37,19 @@ public class Setup {
         switch (ConfigurationManager.getInstance().getProperty("Local").toUpperCase()) {
             case "TRUE":
                 //Run tests locally
+                logger.info("\u001B[32m" + "###############Loading local driver############ "+scenario.getName() + "\u001B[0m");
                 DriverManager.getInstance().LoadDriver(ConfigurationManager.getInstance().getProperty("browser"));
+                break;
             case "FALSE":
                 //Run test via hub and node
                 try {
+                    logger.info("\u001B[32m" + "###############loading remote driver############# "+scenario.getName() + "\u001B[0m");
                     DriverManager.getInstance().LoadRemoteDriver(ConfigurationManager.getInstance().getProperty("browser"));
                 } catch (MalformedURLException e) {
+                    logger.info("\u001B[32m" + "###############Exception############# "+scenario.getName() + "\u001B[0m");
                     e.printStackTrace();
                 }
+                break;
         }
         DriverManager.getInstance().navigateToURL(ConfigurationManager.getInstance().getProperty("URL"));
     }

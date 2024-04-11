@@ -28,19 +28,19 @@
     <dependency>
         <groupId>org.seleniumhq.selenium</groupId>
         <artifactId>selenium-java</artifactId>
-        <version>4.15.0</version>
+        <version>4.19.1</version>
     </dependency>
       <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-edge-driver -->
       <dependency>
           <groupId>org.seleniumhq.selenium</groupId>
           <artifactId>selenium-chrome-driver</artifactId>
-          <version>4.15.0</version>
+          <version>4.19.1</version>
       </dependency>
       <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-firefox-driver -->
       <dependency>
           <groupId>org.seleniumhq.selenium</groupId>
           <artifactId>selenium-firefox-driver</artifactId>
-          <version>4.15.0</version>
+          <version>4.19.1</version>
       </dependency>
       <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
       <dependency>

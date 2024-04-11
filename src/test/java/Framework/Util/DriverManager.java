@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Time;
 import java.time.Duration;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -97,13 +98,17 @@ public class DriverManager {
                 capabilities.setBrowserName("chrome");
                 //Set hub and node locally or on docker
                 //change Docker property in default.properties
-                if (ConfigurationManager.getInstance().getProperty("Docker") == "True") {
+                if (ConfigurationManager.getInstance().getProperty("Docker").toUpperCase().equals("TRUE")) {
                     //if hub and nodes are setup on docker
+                    System.out.println("\u001B[32m" + "########running on docker driver manager############# " + "\u001B[0m");
                     setWebDriver(new RemoteWebDriver(new URL(ConfigurationManager.getInstance().getProperty("DOCKERHUB")),capabilities));
+                    System.out.println("$$$$$$$$$$$$$running on docker driver manager$$$$$$$$$$$$$$$$$$$");
                 }
                 else {
                     //if hub and node are setup locally
+                    System.out.println("\u001B[32m" + "########running on local docker driver manager############# " + "\u001B[0m");
                     setWebDriver(new RemoteWebDriver(new URL(ConfigurationManager.getInstance().getProperty("LOCALHUB")),capabilities));
+                    System.out.println("$$$$$$$$$$$$$running on local docker driver maanager$$$$$$$$$$$$$$$$$$$");
                 }
 
                 break;
