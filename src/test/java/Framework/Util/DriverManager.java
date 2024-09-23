@@ -154,4 +154,66 @@ public class DriverManager {
         return webDriver.getTitle();
     }
 
+	public void startListeningToAPIRequests(String matcher) {
+        DevTools devTools = ((HasDevTools)webDriver).getDevTools();
+        devTools.createSession();
+        devTools.send(Network.enable(Optional.empty(),Optional.empty(),Optional.empty()));
+        devTools.addListener(
+            Network.requestWillBeSent(),
+            request -> {
+              if (request.getRequest().getUrl().contains(matcher)) {
+                for (String headerPair : request.getRequest().getHeaders().toString().split(",")) {
+                  if (headerPair.split("=")[0].trim().equals("X-CSRFTOKEN")) {
+                    csrfToken = headerPair.split("=")[1];
+                  }
+                }
+              }
+            });
+    }
+
+
+    public void startListeningToAPIResponses(String matcher, ResourceType type) {
+        logger.info("listening to API responses for API matching with: " + matcher);
+        DevTools devTools = ((HasDevTools) webDriver).getDevTools();
+        devTools.createSession();
+        devTools.send(Network.enable(Optional.empty(),Optional.empty(),
+                Optional.empty()));
+        devTools.addListener(
+            Network.responseReceived(),
+            responseReceived -> {
+              if (responseReceived.getResponse().getUrl().contains(matcher)
+                  && responseReceived.getType() == type) {
+                response = responseReceived.getResponse().getStatus();
+                logger.info(
+                        "\u001B[32m" + "response logged for "
+                        + matcher
+                        + ": "
+                        + response
+                        + " status_text: "
+                        + responseReceived.getType()
+                        + " method: "
+                        + responseReceived.getResponse().getUrl()
+                        + " by thread: "
+                        + Thread.currentThread().getName() + "\u001B[0m");
+              }
+            });
+    }
+
+    @SuppressWarnings("resource")
+    public void interceptNetworkRequests(String matcher) {
+        logger.info("listening to API responses for API matching with: " + matcher);
+        NetworkInterceptor networkInterceptor = new NetworkInterceptor(
+                webDriver,
+                (Filter)
+                    next ->
+                        req -> {
+                        System.out.println(req.getHeader("x-csrftoken"));
+                        if (req.getUri().contains(matcher)) {
+                            response = next.execute(req).getStatus();
+                        }
+                        return next.execute(req);
+                }
+        );
+    }
+
 }
