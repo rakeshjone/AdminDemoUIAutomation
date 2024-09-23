@@ -1,0 +1,224 @@
+version: 2.1
+
+orbs:
+  browser-tools: circleci/browser-tools@1.4.8
+
+jobs:
+  test-Chrome-QA1-1-Forms-Appointments-PatientPortal:
+    docker:
+      - image: cimg/openjdk:21.0.2-browsers
+    parallelism: 1
+    environment:
+      TAGS: "(@FormsPreviewFeature or @AppointmentsFeature or @PatientPortal) and (not @In-Progress) and (not @Flaky)"
+      endpoint: "QA1"
+    steps:
+      - browser-tools/install-browser-tools:
+          chrome-version: latest
+          replace-existing-chrome: true
+      - browser-tools/install-chromedriver
+      - checkout
+      - run:
+          command: |
+            google-chrome --version
+            chromedriver --version
+            java -jar /usr/local/bin/selenium.jar --version
+      - run:
+          name: Install dependencies
+          command: |
+            mvn install -DskipTests
+      - run:
+          name: Start Selenium Server
+          command: |
+            java -jar /usr/local/bin/selenium.jar &
+            sleep 10 # Wait for Selenium Server to start
+      - run:
+          name: Run tests
+          no_output_timeout: 30m
+          command: |
+            mvn test -T 15C -D"cucumber.filter.tags= ${TAGS}"
+      - store_test_results:
+          path: target/surefire-reports
+      - store_artifacts:
+          path: target/HtmlReports
+  test-Chrome-QA1-2-PatientWindow-AdyenFeature:
+    docker:
+      - image: cimg/openjdk:21.0.2-browsers
+    parallelism: 1
+    environment:
+      TAGS: "(@PatientWindow or @PatientWindowTask or @AdyenFeature or @PaymentTable) and (not @In-Progress) and (not @Flaky)"
+      endpoint: "QA1"
+    steps:
+      - browser-tools/install-browser-tools:
+          chrome-version: latest
+          replace-existing-chrome: true
+      - browser-tools/install-chromedriver
+      - checkout
+      - run:
+          command: |
+            google-chrome --version
+            chromedriver --version
+            java -jar /usr/local/bin/selenium.jar --version
+      - run:
+          name: Install dependencies
+          command: |
+            mvn install -DskipTests
+      - run:
+          name: Start Selenium Server
+          command: |
+            java -jar /usr/local/bin/selenium.jar &
+            sleep 10 # Wait for Selenium Server to start
+      - run:
+          name: Run tests
+          no_output_timeout: 30m
+          command: |
+            mvn test -T 15C -D"cucumber.filter.tags= ${TAGS}"
+      - store_test_results:
+          path: target/surefire-reports
+      - store_artifacts:
+          path: target/HtmlReports
+  test-Chrome-QA1-3-AdyenTransaction-Payments-Campaign1:
+    docker:
+      - image: cimg/openjdk:21.0.2-browsers
+    parallelism: 1
+    environment:
+      TAGS: "(@AdyenTransaction or @CardFailure or @PaymentModal or @PaymentFeature or @CampaignsFeature1) and (not @In-Progress) and (not @Flaky)"
+      endpoint: "QA1"
+    steps:
+      - browser-tools/install-browser-tools:
+          chrome-version: latest
+          replace-existing-chrome: true
+      - browser-tools/install-chromedriver
+      - checkout
+      - run:
+          command: |
+            google-chrome --version
+            chromedriver --version
+            java -jar /usr/local/bin/selenium.jar --version
+      - run:
+          name: Install dependencies
+          command: |
+            mvn install -DskipTests
+      - run:
+          name: Start Selenium Server
+          command: |
+            java -jar /usr/local/bin/selenium.jar &
+            sleep 10 # Wait for Selenium Server to start
+      - run:
+          name: Run tests
+          no_output_timeout: 30m
+          command: |
+            mvn test -T 15C -D"cucumber.filter.tags= ${TAGS}"
+      - store_test_results:
+          path: target/surefire-reports
+      - store_artifacts:
+          path: target/HtmlReports
+  test-Chrome-QA1-4-Adyen-Campaign-Home-Login-RevenueIQ:
+    docker:
+      - image: cimg/openjdk:21.0.2-browsers
+    parallelism: 1
+    environment:
+      TAGS: "(@AdyenWidgets or @CampaignsFeature or @HomeFeature or @LoginFeature or @RevenueIQ) and (not @In-Progress) and (not @Flaky)"
+      endpoint: "QA1"
+    steps:
+      - browser-tools/install-browser-tools:
+          chrome-version: latest
+          replace-existing-chrome: true
+      - browser-tools/install-chromedriver
+      - checkout
+      - run:
+          command: |
+            google-chrome --version
+            chromedriver --version
+            java -jar /usr/local/bin/selenium.jar --version
+      - run:
+          name: Install dependencies
+          command: |
+            mvn install -DskipTests
+      - run:
+          name: Start Selenium Server
+          command: |
+            java -jar /usr/local/bin/selenium.jar &
+            sleep 10 # Wait for Selenium Server to start
+      - run:
+          name: Run tests
+          no_output_timeout: 30m
+          command: |
+            mvn test -T 15C -D"cucumber.filter.tags= ${TAGS}"
+      - store_test_results:
+          path: target/surefire-reports
+      - store_artifacts:
+          path: target/HtmlReports
+  test-Chrome-QA1-5-Flaky:
+    docker:
+      - image: cimg/openjdk:21.0.2-browsers
+    parallelism: 1
+    environment:
+      TAGS: "@Flaky and (not @In-Progress)"
+      endpoint: "QA1"
+    steps:
+      - browser-tools/install-browser-tools:
+          chrome-version: latest
+          replace-existing-chrome: true
+      - browser-tools/install-chromedriver
+      - checkout
+      - run:
+          command: |
+            google-chrome --version
+            chromedriver --version
+            java -jar /usr/local/bin/selenium.jar --version
+      - run:
+          name: Install dependencies
+          command: |
+            mvn install -DskipTests
+      - run:
+          name: Start Selenium Server
+          command: |
+            java -jar /usr/local/bin/selenium.jar &
+            sleep 10 # Wait for Selenium Server to start
+      - run:
+          name: Run tests
+          no_output_timeout: 30m
+          command: |
+            mvn test -T 15C -D"cucumber.filter.tags= ${TAGS}"
+      - store_test_results:
+          path: target/surefire-reports
+      - store_artifacts:
+          path: target/HtmlReports
+  update_bitbucket:
+    docker:
+      - image: cimg/openjdk:21.0.2-browsers
+    steps:
+      - checkout
+      - run:
+          name: Update Bitbucket
+          command: |
+            echo $CIRCLE_BUILD_URL
+            ARTIFACT_URL="$CIRCLE_BUILD_URL/$CIRCLE_BUILD_NUM/artifacts/0/target"
+            curl -X POST \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer YOUR_BITBUCKET_API_TOKEN" \
+              -d "{\"content\": \"Tests have completed successfully. :white_check_mark:\\nYou can download artifacts [here](${ARTIFACT_URL}).\"}" \
+              https://api.bitbucket.org/2.0/repositories/practiceintelligence/pbnuiautomation/pullrequests/PULL_REQUEST_ID/comments
+workflows:
+  build-deploy:
+    jobs:
+      - hold-test:
+          type: approval
+      - test-Chrome-QA1-1-Forms-Appointments-PatientPortal:
+          requires:
+            - hold-test
+      - test-Chrome-QA1-2-PatientWindow-AdyenFeature:
+          requires:
+            - hold-test
+      - test-Chrome-QA1-3-AdyenTransaction-Payments-Campaign1:
+          requires:
+            - hold-test
+      - test-Chrome-QA1-4-Adyen-Campaign-Home-Login-RevenueIQ:
+          requires:
+            - hold-test
+      - test-Chrome-QA1-5-Flaky:
+          requires:
+            - hold-test
+      - update_bitbucket:
+          requires:
+            - hold-test
