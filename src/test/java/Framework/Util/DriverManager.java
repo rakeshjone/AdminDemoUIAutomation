@@ -118,6 +118,30 @@ public class DriverManager {
         webDriver.manage().window().maximize();
     }
 
+	public void loadElectronDriver() {
+        //System.setProperty(
+          //      "webdriver.chrome.driver",
+            //    "C:\\Users\\RakeshChauhan\\Downloads\\chromedriver-v32.2.0-win32-x64\\chromedriver.exe");
+        ChromeOptions options = new ChromeOptions();
+        //options.setBinary(
+          //      "C:\\Users\\RakeshChauhan\\AppData\\Local\\Programs\\pbn-desktop-app\\Practice by Numbers.exe");
+        options.setAcceptInsecureCerts(true);
+        options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+        options.addArguments("--no-sandbox"); // Bypass OS security model
+        options.addArguments("--headless");
+        webDriver = new ChromeDriver(options);
+        Driver = webDriver;
+        String mainWindow = webDriver.getWindowHandle();
+        Set<String> openedWindows = webDriver.getWindowHandles();
+        for (String newWindow: openedWindows) {
+            webDriver.switchTo().window(newWindow);
+            if (Objects.equals(webDriver.getTitle(), "Practice by Numbers")) {
+                break;
+            }
+        }
+    }
+
+	
     public void closeDriver(){
         if (webDriver !=null){
         	webDriver.close();
