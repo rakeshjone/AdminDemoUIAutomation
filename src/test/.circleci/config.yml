@@ -4,12 +4,12 @@ orbs:
   browser-tools: circleci/browser-tools@1.4.8
 
 jobs:
-  test-Chrome-QA1-1-Forms-Appointments-PatientPortal:
+  test-Chrome-QA1-1-Forms-Appointments-PatientPortal-Home-Login-RevenueIQ:
     docker:
       - image: cimg/openjdk:21.0.2-browsers
     parallelism: 1
     environment:
-      TAGS: "(@FormsPreviewFeature or @AppointmentsFeature or @PatientPortal) and (not @In-Progress) and (not @Flaky)"
+      TAGS: "(@FormsPreviewFeature or @AppointmentsFeature or @PatientPortal or @HomeFeature or @LoginFeature or @RevenueIQ) and (not @In-Progress) and (not @Flaky)"
       endpoint: "QA1"
     steps:
       - browser-tools/install-browser-tools:
@@ -40,12 +40,12 @@ jobs:
           path: target/surefire-reports
       - store_artifacts:
           path: target/HtmlReports
-  test-Chrome-QA1-2-PatientWindow-AdyenFeature:
+  test-Chrome-QA1-2-PatientWindow-PaymentTemplate:
     docker:
       - image: cimg/openjdk:21.0.2-browsers
     parallelism: 1
     environment:
-      TAGS: "(@PatientWindow or @PatientWindowTask or @AdyenFeature or @PaymentTable) and (not @In-Progress) and (not @Flaky)"
+      TAGS: "(@PatientWindow or @PatientWindowTask or @PaymentTemplateFeature) and (not @In-Progress) and (not @Flaky)"
       endpoint: "QA1"
     steps:
       - browser-tools/install-browser-tools:
@@ -76,12 +76,12 @@ jobs:
           path: target/surefire-reports
       - store_artifacts:
           path: target/HtmlReports
-  test-Chrome-QA1-3-AdyenTransaction-Payments-Campaign1:
+  test-Chrome-QA1-3-Campaign:
     docker:
       - image: cimg/openjdk:21.0.2-browsers
     parallelism: 1
     environment:
-      TAGS: "(@AdyenTransaction or @CardFailure or @PaymentModal or @PaymentFeature or @CampaignsFeature1) and (not @In-Progress) and (not @Flaky)"
+      TAGS: "(@CampaignsFeature) and (not @In-Progress) and (not @Flaky)"
       endpoint: "QA1"
     steps:
       - browser-tools/install-browser-tools:
@@ -112,12 +112,12 @@ jobs:
           path: target/surefire-reports
       - store_artifacts:
           path: target/HtmlReports
-  test-Chrome-QA1-4-Adyen-Campaign-Home-Login-RevenueIQ:
+  test-Chrome-QA1-4-Adyen-AdyenFeature-AdyenTransaction-Payments:
     docker:
       - image: cimg/openjdk:21.0.2-browsers
     parallelism: 1
     environment:
-      TAGS: "(@AdyenWidgets or @CampaignsFeature or @HomeFeature or @LoginFeature or @RevenueIQ) and (not @In-Progress) and (not @Flaky)"
+      TAGS: "(@AdyenWidgets or @AdyenFeature or @PaymentTable @AdyenTransaction or @CardFailure or @PaymentModal or @PaymentFeature) and (not @In-Progress) and (not @Flaky)"
       endpoint: "QA1"
     steps:
       - browser-tools/install-browser-tools:
@@ -148,7 +148,43 @@ jobs:
           path: target/surefire-reports
       - store_artifacts:
           path: target/HtmlReports
-  test-Chrome-QA1-5-Flaky:
+  test-Chrome-QA1-5-Campaign1:
+    docker:
+      - image: cimg/openjdk:21.0.2-browsers
+    parallelism: 1
+    environment:
+      TAGS: "(@CampaignsFeature1) and (not @In-Progress) and (not @Flaky)"
+      endpoint: "QA1"
+    steps:
+      - browser-tools/install-browser-tools:
+          chrome-version: latest
+          replace-existing-chrome: true
+      - browser-tools/install-chromedriver
+      - checkout
+      - run:
+          command: |
+            google-chrome --version
+            chromedriver --version
+            java -jar /usr/local/bin/selenium.jar --version
+      - run:
+          name: Install dependencies
+          command: |
+            mvn install -DskipTests
+      - run:
+          name: Start Selenium Server
+          command: |
+            java -jar /usr/local/bin/selenium.jar &
+            sleep 10 # Wait for Selenium Server to start
+      - run:
+          name: Run tests
+          no_output_timeout: 30m
+          command: |
+            mvn test -T 15C -D"cucumber.filter.tags= ${TAGS}"
+      - store_test_results:
+          path: target/surefire-reports
+      - store_artifacts:
+          path: target/HtmlReports
+  test-Chrome-QA1-6-Flaky:
     docker:
       - image: cimg/openjdk:21.0.2-browsers
     parallelism: 1
@@ -204,19 +240,22 @@ workflows:
     jobs:
       - hold-test:
           type: approval
-      - test-Chrome-QA1-1-Forms-Appointments-PatientPortal:
+      - test-Chrome-QA1-1-Forms-Appointments-PatientPortal-Home-Login-RevenueIQ:
           requires:
             - hold-test
-      - test-Chrome-QA1-2-PatientWindow-AdyenFeature:
+      - test-Chrome-QA1-2-PatientWindow-PaymentTemplate:
           requires:
             - hold-test
-      - test-Chrome-QA1-3-AdyenTransaction-Payments-Campaign1:
+      - test-Chrome-QA1-3-Campaign:
           requires:
             - hold-test
-      - test-Chrome-QA1-4-Adyen-Campaign-Home-Login-RevenueIQ:
+      - test-Chrome-QA1-4-Adyen-AdyenFeature-AdyenTransaction-Payments:
           requires:
             - hold-test
-      - test-Chrome-QA1-5-Flaky:
+      - test-Chrome-QA1-5-Campaign1:
+          requires:
+            - hold-test
+      - test-Chrome-QA1-6-Flaky:
           requires:
             - hold-test
       - update_bitbucket:
